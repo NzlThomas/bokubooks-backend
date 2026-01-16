@@ -12,4 +12,22 @@ async function createUser(username, hashedPassword) {
   });
 }
 
-export default { findUserByUsername, createUser };
+async function findWishlist(userId, title) {
+  return prisma.book.findFirst({
+    where: {
+      userId,
+      title: {
+        equals: title,
+        mode: "insensitive",
+      },
+    },
+  });
+}
+
+async function addWishlist(userId, title) {
+  return prisma.book.create({
+    data: { userId, title },
+  });
+}
+
+export default { findUserByUsername, createUser, findWishlist, addWishlist };
