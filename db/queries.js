@@ -25,6 +25,21 @@ async function findWishlist(userId, title) {
   });
 }
 
+async function findCollection(userId, title) {
+  return prisma.book.findFirst({
+    where: {
+      userId,
+      title: {
+        equals: title,
+        mode: "insensitive",
+      },
+      totalVolumes: {
+        not: null,
+      },
+    },
+  });
+}
+
 async function findUserWishlist(userId) {
   return prisma.book.findMany({
     where: {
@@ -121,6 +136,7 @@ async function addCollection(userId, title, totalVolumes, totalRead) {
 export default {
   findUserByUsername,
   createUser,
+  findCollection,
   findWishlist,
   findUserWishlist,
   findWishlistById,
