@@ -29,6 +29,14 @@ async function postWishlist(req, res) {
         .json({ error: "This book is already in the wishlist." });
     }
 
+    const collectionVerification = await db.findCollection(userId, title);
+
+    if (collectionVerification) {
+      return res
+        .status(409)
+        .json({ error: "This book is already in your collection." });
+    }
+
     const newBook = await db.addWishlist(userId, title);
 
     res.status(201).json({ message: "Book added to wishlist.", newBook });
