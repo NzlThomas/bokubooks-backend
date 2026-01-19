@@ -20,6 +20,7 @@ async function findWishlist(userId, title) {
         equals: title,
         mode: "insensitive",
       },
+      totalVolumes: null,
     },
   });
 }
@@ -44,6 +45,7 @@ async function findWishlistById(bookId) {
   return prisma.book.findFirst({
     where: {
       id: bookId,
+      totalVolumes: null,
     },
     select: {
       id: true,
@@ -56,12 +58,63 @@ async function findWishlistById(bookId) {
 async function addWishlist(userId, title) {
   return prisma.book.create({
     data: { userId, title },
+    select: {
+      id: true,
+      title: true,
+    },
   });
 }
 
 async function deleteWishlist(id) {
   return prisma.book.delete({
     where: { id },
+  });
+}
+
+async function isAlreadyAdded(title, userId) {
+  return prisma.book.findFirst({
+    where: {
+      userId,
+      title: {
+        equals: title,
+        mode: "insensitive",
+      },
+      totalVolumes: {
+        not: null,
+      },
+    },
+  });
+}
+
+async function updateWishlist(totalRead, totalVolumes, bookId) {
+  return prisma.book.update({
+    where: {
+      id: bookId,
+    },
+    data: { totalRead, totalVolumes },
+    select: {
+      id: true,
+      title: true,
+      totalRead: true,
+      totalVolumes: true,
+    },
+  });
+}
+
+async function addCollection(userId, title, totalVolumes, totalRead) {
+  return prisma.book.create({
+    data: {
+      title,
+      totalRead,
+      totalVolumes,
+      userId,
+    },
+    select: {
+      id: true,
+      title: true,
+      totalRead: true,
+      totalVolumes: true,
+    },
   });
 }
 
@@ -73,4 +126,7 @@ export default {
   findWishlistById,
   addWishlist,
   deleteWishlist,
+  isAlreadyAdded,
+  updateWishlist,
+  addCollection,
 };
