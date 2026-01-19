@@ -24,10 +24,53 @@ async function findWishlist(userId, title) {
   });
 }
 
+async function findUserWishlist(userId) {
+  return prisma.book.findMany({
+    where: {
+      userId,
+      totalVolumes: null,
+    },
+    select: {
+      id: true,
+      title: true,
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+}
+
+async function findWishlistById(bookId) {
+  return prisma.book.findFirst({
+    where: {
+      id: bookId,
+    },
+    select: {
+      id: true,
+      userId: true,
+      title: true,
+    },
+  });
+}
+
 async function addWishlist(userId, title) {
   return prisma.book.create({
     data: { userId, title },
   });
 }
 
-export default { findUserByUsername, createUser, findWishlist, addWishlist };
+async function deleteWishlist(id) {
+  return prisma.book.delete({
+    where: { id },
+  });
+}
+
+export default {
+  findUserByUsername,
+  createUser,
+  findWishlist,
+  findUserWishlist,
+  findWishlistById,
+  addWishlist,
+  deleteWishlist,
+};
