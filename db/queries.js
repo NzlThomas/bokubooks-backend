@@ -174,6 +174,25 @@ async function removeCollection(id) {
   });
 }
 
+async function updateBook(id, title, totalRead, totalVolumes) {
+  return prisma.book.update({
+    where: {
+      id,
+    },
+    data: {
+      title,
+      totalRead,
+      totalVolumes,
+    },
+    select: {
+      id: true,
+      title: true,
+      totalRead: true,
+      totalVolumes: true,
+    },
+  });
+}
+
 export default {
   findUserByUsername,
   createUser,
@@ -189,4 +208,5 @@ export default {
   addCollection,
   findCollectionById,
   removeCollection,
+  updateBook,
 };
