@@ -8,6 +8,7 @@ router.post("/register", userController.postRegister);
 router.post("/login", userController.postLogin);
 
 router.put("/username", verifyToken, userController.putUsername);
+router.put("/password", verifyToken, userController.putPassword);
 
 router.get("/wishlist", verifyToken, bookController.getWishlist);
 router.post("/wishlist", verifyToken, bookController.postWishlist);
