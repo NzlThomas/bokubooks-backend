@@ -74,6 +74,18 @@ async function deleteWishlist(req, res) {
   }
 }
 
+async function getCollection(req, res) {
+  try {
+    const userId = req.userId;
+
+    const collection = await db.findUserCollection(userId);
+
+    res.status(200).json({ collection });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve user collection." });
+  }
+}
+
 async function postCollection(req, res) {
   try {
     const userId = req.userId;
@@ -139,4 +151,10 @@ async function postCollection(req, res) {
   }
 }
 
-export default { postWishlist, deleteWishlist, getWishlist, postCollection };
+export default {
+  postWishlist,
+  deleteWishlist,
+  getWishlist,
+  getCollection,
+  postCollection,
+};

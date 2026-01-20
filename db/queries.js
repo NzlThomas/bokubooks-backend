@@ -116,6 +116,23 @@ async function updateWishlist(totalRead, totalVolumes, bookId) {
   });
 }
 
+async function findUserCollection(userId) {
+  return prisma.book.findMany({
+    where: {
+      userId,
+      totalVolumes: {
+        not: null,
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      totalVolumes: true,
+      totalRead: true,
+    },
+  });
+}
+
 async function addCollection(userId, title, totalVolumes, totalRead) {
   return prisma.book.create({
     data: {
@@ -144,5 +161,6 @@ export default {
   deleteWishlist,
   isAlreadyAdded,
   updateWishlist,
+  findUserCollection,
   addCollection,
 };
