@@ -181,6 +181,54 @@ async function deleteCollection(req, res) {
   }
 }
 
+async function putCollection(req, res) {
+  try {
+    const userId = req.userId;
+    const { id, title, totalRead, totalVolumes } = req.body;
+
+    if (!title || totalRead === undefined || totalVolumes === undefined) {
+      return res.status(400).json({
+        error: "Missing Book id, title, volumes read or volumes owned.",
+      });
+    }
+
+    if (totalRead < 0 || totalVolumes < 0) {
+      return res.status(400).json({
+        error: "Values cannot be inferior to 0",
+      });
+    }
+
+    if (totalVolumes === 0) {
+      return res.status(400).json({
+        error:
+          "You must own at least 1 volume to add a book to your collection.",
+      });
+    }
+
+    if (totalRead > totalVolumes) {
+      return res.status(400).json({
+        error: "Read volumes cannot be superior to owned volumes.",
+      });
+    }
+
+    const book = await db.findCollectionById(id);
+
+    if (!book) {
+      return res.status(404).json({ error: "Book not found." });
+    }
+
+    if (book.userId !== userId) {
+      return res.status(403).json({ error: "Access denied." });
+    }
+
+    const updatedBook = await db.updateBook(id, title, totalRead, totalVolumes);
+
+    res.status(200).json({ message: "Book updated successfully", updatedBook });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update book." });
+  }
+}
+
 export default {
   postWishlist,
   deleteWishlist,
@@ -188,4 +236,5 @@ export default {
   getCollection,
   postCollection,
   deleteCollection,
+  putCollection,
 };
