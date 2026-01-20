@@ -12,6 +12,33 @@ async function createUser(username, hashedPassword) {
   });
 }
 
+async function updateUsername(userId, newUsername) {
+  return prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      username: newUsername,
+    },
+    select: {
+      username: true,
+    },
+  });
+}
+
+async function updatePassword(userId, newPassword) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: { password: newPassword },
+  });
+}
+
+async function findUserById(id) {
+  return prisma.user.findFirst({
+    where: { id },
+  });
+}
+
 async function findWishlist(userId, title) {
   return prisma.book.findFirst({
     where: {
@@ -194,8 +221,11 @@ async function updateBook(id, title, totalRead, totalVolumes) {
 }
 
 export default {
+  findUserById,
   findUserByUsername,
   createUser,
+  updateUsername,
+  updatePassword,
   findCollection,
   findWishlist,
   findUserWishlist,
