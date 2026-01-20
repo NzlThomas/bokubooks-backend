@@ -68,4 +68,31 @@ async function postLogin(req, res) {
   }
 }
 
-export default { postRegister, postLogin };
+async function putUsername(req, res) {
+  try {
+    const userId = req.userId;
+    const { newUsername } = req.body;
+
+    if (!newUsername || newUsername.length < 8) {
+      return res
+        .status(400)
+        .json({ error: "Username missing or below 8 characters." });
+    }
+
+    const isUsernameTaken = await db.findUserByUsername(newUsername);
+
+    if (isUsernameTaken) {
+      return res.status(400).send("Username taken");
+    }
+
+    const updatedUsername = await db.updateUsername(userId, newUsername);
+
+    res
+      .status(200)
+      .json({ message: "Updated username successfully", updatedUsername });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update username" });
+  }
+}
+
+export default { postRegister, postLogin, putUsername };

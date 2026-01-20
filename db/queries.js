@@ -12,6 +12,20 @@ async function createUser(username, hashedPassword) {
   });
 }
 
+async function updateUsername(userId, newUsername) {
+  return prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      username: newUsername,
+    },
+    select: {
+      username: true,
+    },
+  });
+}
+
 async function findWishlist(userId, title) {
   return prisma.book.findFirst({
     where: {
@@ -196,6 +210,7 @@ async function updateBook(id, title, totalRead, totalVolumes) {
 export default {
   findUserByUsername,
   createUser,
+  updateUsername,
   findCollection,
   findWishlist,
   findUserWishlist,
