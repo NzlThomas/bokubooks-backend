@@ -13,5 +13,6 @@ router.delete("/wishlist", verifyToken, bookController.deleteWishlist);
 
 router.get("/collection", verifyToken, bookController.getCollection);
 router.post("/collection", verifyToken, bookController.postCollection);
+router.delete("/collection", verifyToken, bookController.deleteCollection);
 
 export default router;
