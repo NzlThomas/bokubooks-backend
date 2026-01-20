@@ -150,6 +150,30 @@ async function addCollection(userId, title, totalVolumes, totalRead) {
   });
 }
 
+async function findCollectionById(bookId) {
+  return prisma.book.findFirst({
+    where: {
+      id: bookId,
+      totalVolumes: {
+        not: null,
+      },
+    },
+    select: {
+      id: true,
+      userId: true,
+      title: true,
+    },
+  });
+}
+
+async function removeCollection(id) {
+  return prisma.book.delete({
+    where: {
+      id,
+    },
+  });
+}
+
 export default {
   findUserByUsername,
   createUser,
@@ -163,4 +187,6 @@ export default {
   updateWishlist,
   findUserCollection,
   addCollection,
+  findCollectionById,
+  removeCollection,
 };

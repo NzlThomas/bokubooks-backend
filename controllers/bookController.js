@@ -151,10 +151,41 @@ async function postCollection(req, res) {
   }
 }
 
+async function deleteCollection(req, res) {
+  try {
+    const userId = req.userId;
+
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ error: "Book ID required." });
+    }
+
+    const findBook = await db.findCollectionById(id);
+
+    if (!findBook) {
+      return res.status(404).json({ error: "Book not found." });
+    }
+
+    if (findBook.userId !== userId) {
+      return res.status(403).json({ error: "Access denied." });
+    }
+
+    await db.removeCollection(id);
+
+    res
+      .status(200)
+      .json({ deletedBook: { id: findBook.id, title: findBook.title } });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete entry from collection." });
+  }
+}
+
 export default {
   postWishlist,
   deleteWishlist,
   getWishlist,
   getCollection,
   postCollection,
+  deleteCollection,
 };
