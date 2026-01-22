@@ -6,6 +6,8 @@ import verifyToken from "../middlewares/authMiddleware.js";
 
 router.post("/register", userController.postRegister);
 router.post("/login", userController.postLogin);
+router.post("/logout", userController.postLogout);
+router.get("/profile", verifyToken, userController.getProfile);
 
 router.put("/username", verifyToken, userController.putUsername);
 router.put("/password", verifyToken, userController.putPassword);
