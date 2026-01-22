@@ -1,11 +1,9 @@
 import jwt from "jsonwebtoken";
 
 function verifyToken(req, res, next) {
-  const bearerHeader = req.headers["authorization"];
-  if (!bearerHeader) return res.status(401).json({ error: "Access Denied" });
+  const token = req.cookies.token;
 
-  const token = bearerHeader.split(" ")[1];
-  if (!token) return res.status(501).json({ error: "Access Denied" });
+  if (!token) return res.status(401).json({ error: "No token provided" });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
