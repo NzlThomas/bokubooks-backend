@@ -6,6 +6,16 @@ async function findUserByUsername(username) {
   });
 }
 
+async function getUserProfile(userId) {
+  return prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      username: true,
+    },
+  });
+}
+
 async function createUser(username, hashedPassword) {
   return prisma.user.create({
     data: { username, password: hashedPassword },
@@ -223,6 +233,7 @@ async function updateBook(id, title, totalRead, totalVolumes) {
 export default {
   findUserById,
   findUserByUsername,
+  getUserProfile,
   createUser,
   updateUsername,
   updatePassword,
