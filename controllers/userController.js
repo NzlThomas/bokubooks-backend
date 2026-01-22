@@ -56,15 +56,41 @@ async function postLogin(req, res) {
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: "60min",
     });
-    res.status(200).json({
-      token,
-      user: {
-        id: user.id,
-        username: user.username,
-      },
-    });
+    res
+      .cookie("token", token, { httpOnly: true })
+      .status(200)
+      .json({ user: { id: user.id, username: user.username } });
   } catch (error) {
     res.status(500).json({ error: "Login failed" });
+  }
+}
+
+async function postLogout(req, res) {
+  try {
+    res
+      .clearCookie("token", {
+        httpOnly: true,
+      })
+      .status(200)
+      .json({ message: "Logged out successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Logout failed" });
+  }
+}
+
+async function getProfile(req, res) {
+  try {
+    const userId = req.userId;
+
+    const user = await db.getUserProfile(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve user infos" });
   }
 }
 
@@ -140,4 +166,11 @@ async function putPassword(req, res) {
   }
 }
 
-export default { postRegister, postLogin, putUsername, putPassword };
+export default {
+  postRegister,
+  postLogin,
+  postLogout,
+  getProfile,
+  putUsername,
+  putPassword,
+};
