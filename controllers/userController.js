@@ -99,16 +99,16 @@ async function putUsername(req, res) {
     const userId = req.userId;
     const { newUsername } = req.body;
 
-    if (!newUsername || newUsername.length < 8) {
+    if (!newUsername || newUsername.length < 3) {
       return res
         .status(400)
-        .json({ error: "Username missing or below 8 characters." });
+        .json({ error: "Username missing or below 3 characters." });
     }
 
     const isUsernameTaken = await db.findUserByUsername(newUsername);
 
     if (isUsernameTaken) {
-      return res.status(400).send("Username taken");
+      return res.status(409).send("Username taken");
     }
 
     const updatedUsername = await db.updateUsername(userId, newUsername);
@@ -128,32 +128,40 @@ async function putPassword(req, res) {
 
     if (!currentPassword || !newPassword) {
       return res.status(400).json({
-        error: "Current and new password are required",
+        error: "MISSING_FIELDS",
+        message: "Current and new password are required",
       });
     }
 
     if (newPassword.length < 8) {
       return res.status(400).json({
-        error: "Password must be at least 8 characters long",
+        error: "PASSWORD_TOO_SHORT",
+        message: "Password must be at least 8 characters long",
       });
     }
 
     const user = await db.findUserById(userId);
 
     if (!user) {
-      return res.status(401).json({ error: "User not found" });
+      return res
+        .status(401)
+        .json({ error: "USER_NOT_FOUND", message: "User not found" });
     }
 
     const isValid = await bcrypt.compare(currentPassword, user.password);
 
     if (!isValid) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({
+        error: "INVALID_CURRENT_PASSWORD",
+        message: "Invalid credentials",
+      });
     }
 
     const isDifferent = await bcrypt.compare(newPassword, user.password);
     if (isDifferent) {
       return res.status(400).json({
-        error: "New password must be different from the old one",
+        error: "SAME_PASSWORDS",
+        message: "New password must be different from the old one",
       });
     }
 
