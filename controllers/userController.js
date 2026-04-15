@@ -4,30 +4,42 @@ import jwt from "jsonwebtoken";
 
 async function postRegister(req, res) {
   try {
-    const { username, password } = req.body;
+    const { username, password, confirmPassword } = req.body;
 
     if (!username || !password) {
       return res.status(400).json({
-        error: "Username and password are required",
+        error: "MISSING_FIELDS",
+        message: "Username and password are required",
+      });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        error: "PASSWORDS_DONT_MATCH",
+        message: "The two password fields must match.",
       });
     }
 
     if (username.length < 3 || username.length > 20) {
       return res.status(400).json({
-        error: "Username must be between 3 and 20 characters",
+        error: "USERNAME_LENGTH",
+        message: "Username must be between 3 and 20 characters",
       });
     }
 
     if (password.length < 8) {
       return res.status(400).json({
-        error: "Password must be at least 8 characters long",
+        error: "PASSWORD_TOO_SHORT",
+        messsage: "Password must be at least 8 characters long",
       });
     }
 
     const existingUser = await db.findUserByUsername(username);
 
     if (existingUser) {
-      return res.status(400).send("User already exists");
+      return res
+        .status(409)
+        .json({ error: "USER_ALREADY_EXISTS", message: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -44,13 +56,19 @@ async function postLogin(req, res) {
     const user = await db.findUserByUsername(username);
 
     if (!user) {
-      return res.status(401).json({ error: "Authentication failed" });
+      return res.status(401).json({
+        error: "AUTHENTICATION_FAILED",
+        message: "Incorrect username and/or password.",
+      });
     }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      return res.status(401).json({ error: "Authentication failed" });
+      return res.status(401).json({
+        error: "AUTHENTICATION_FAILED",
+        message: "Incorrect username and/or password.",
+      });
     }
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
