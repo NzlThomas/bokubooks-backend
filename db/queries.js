@@ -86,6 +86,7 @@ async function findUserWishlist(userId) {
     select: {
       id: true,
       title: true,
+      addedAt: true,
     },
     orderBy: {
       updatedAt: "desc",
