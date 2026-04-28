@@ -231,6 +231,32 @@ async function putCollection(req, res) {
   }
 }
 
+async function getUserStats(req, res) {
+  try {
+    const userId = req.userId;
+    const collection = await db.findUserCollection(userId);
+    const totalSeries = collection.length;
+
+    let totalOwned = [];
+    for (let i = 0; i < collection.length; i++) {
+      totalOwned.push(collection[i].totalVolumes);
+    }
+    const ownedSum = totalOwned.reduce((partialSum, a) => partialSum + a, 0);
+
+    let totalRead = [];
+    for (let i = 0; i < collection.length; i++) {
+      totalRead.push(collection[i].totalRead);
+    }
+    const readSum = totalRead.reduce((partialSum, a) => partialSum + a, 0);
+
+    const stats = { totalSeries, ownedSum, readSum };
+
+    res.status(200).json({ message: "Stats acquired successfully", stats });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve user statistics." });
+  }
+}
+
 export default {
   postWishlist,
   deleteWishlist,
@@ -239,4 +265,5 @@ export default {
   postCollection,
   deleteCollection,
   putCollection,
+  getUserStats,
 };
