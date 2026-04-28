@@ -21,4 +21,6 @@ router.post("/collection", verifyToken, bookController.postCollection);
 router.delete("/collection", verifyToken, bookController.deleteCollection);
 router.put("/collection", verifyToken, bookController.putCollection);
 
+router.get("/stats", verifyToken, bookController.getUserStats);
+
 export default router;
