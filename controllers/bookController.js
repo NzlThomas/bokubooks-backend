@@ -91,7 +91,7 @@ async function getCollection(req, res) {
 async function postCollection(req, res) {
   try {
     const userId = req.userId;
-    const { title, totalRead, totalVolumes } = req.body;
+    const { title, totalRead, totalVolumes, notes } = req.body;
 
     if (!title || totalRead === undefined || totalVolumes === undefined) {
       return res.status(400).json({
@@ -133,6 +133,7 @@ async function postCollection(req, res) {
         totalRead,
         totalVolumes,
         isInWishlist.id,
+        notes,
       );
       return res.status(201).json({
         message: "Booked moved from wishlist to collection",
@@ -145,6 +146,7 @@ async function postCollection(req, res) {
       title,
       totalVolumes,
       totalRead,
+      notes,
     );
 
     res.status(201).json({ message: "Book added successfully.", newBook });
@@ -186,7 +188,7 @@ async function deleteCollection(req, res) {
 async function putCollection(req, res) {
   try {
     const userId = req.userId;
-    const { id, title, totalRead, totalVolumes } = req.body;
+    const { id, title, totalRead, totalVolumes, notes } = req.body;
 
     if (!title || totalRead === undefined || totalVolumes === undefined) {
       return res.status(400).json({
@@ -223,7 +225,13 @@ async function putCollection(req, res) {
       return res.status(403).json({ error: "Access denied." });
     }
 
-    const updatedBook = await db.updateBook(id, title, totalRead, totalVolumes);
+    const updatedBook = await db.updateBook(
+      id,
+      title,
+      totalRead,
+      totalVolumes,
+      notes,
+    );
 
     res.status(200).json({ message: "Book updated successfully", updatedBook });
   } catch (error) {
