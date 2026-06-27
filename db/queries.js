@@ -139,17 +139,18 @@ async function isAlreadyAdded(title, userId) {
   });
 }
 
-async function updateWishlist(totalRead, totalVolumes, bookId) {
+async function updateWishlist(totalRead, totalVolumes, bookId, notes) {
   return prisma.book.update({
     where: {
       id: bookId,
     },
-    data: { totalRead, totalVolumes },
+    data: { totalRead, totalVolumes, notes },
     select: {
       id: true,
       title: true,
       totalRead: true,
       totalVolumes: true,
+      notes: true,
     },
   });
 }
@@ -167,23 +168,26 @@ async function findUserCollection(userId) {
       title: true,
       totalVolumes: true,
       totalRead: true,
+      notes: true,
     },
   });
 }
 
-async function addCollection(userId, title, totalVolumes, totalRead) {
+async function addCollection(userId, title, totalVolumes, totalRead, notes) {
   return prisma.book.create({
     data: {
       title,
       totalRead,
       totalVolumes,
       userId,
+      notes,
     },
     select: {
       id: true,
       title: true,
       totalRead: true,
       totalVolumes: true,
+      notes: true,
     },
   });
 }
@@ -200,6 +204,7 @@ async function findCollectionById(bookId) {
       id: true,
       userId: true,
       title: true,
+      notes: true,
     },
   });
 }
@@ -212,7 +217,7 @@ async function removeCollection(id) {
   });
 }
 
-async function updateBook(id, title, totalRead, totalVolumes) {
+async function updateBook(id, title, totalRead, totalVolumes, notes) {
   return prisma.book.update({
     where: {
       id,
@@ -221,12 +226,14 @@ async function updateBook(id, title, totalRead, totalVolumes) {
       title,
       totalRead,
       totalVolumes,
+      notes,
     },
     select: {
       id: true,
       title: true,
       totalRead: true,
       totalVolumes: true,
+      notes: true,
     },
   });
 }
