@@ -41,17 +41,15 @@ Bokubooks est une application full-stack permettant aux utilisateurs de gérer l
 
 ## Installation
 
-### Cloner les repositories
+### Cloner le projet
 
 ```bash
-git clone git@github.com:NzlThomas/tracker-frontend.git
-
 git clone git@github.com:NzlThomas/tracker-backend.git
 ```
 
 ### Installer les dépendances
 
-A la racine de chaque projet :
+A la racine du projet :
 
 ```bash
 npm i
@@ -59,7 +57,7 @@ npm i
 
 ### Configurer les variables d'environnement
 
-Créer un fichier `.env` à la racine du dossier **Backend** comme noté dans `.env.example`.
+Créer un fichier `.env` à la racine du projet comme noté dans `.env.example`.
 
 ### Initialiser Prisma ORM
 
@@ -73,8 +71,6 @@ npx prisma migrate dev
 node app.js
 ```
 
-### Lancer le frontend
+## Initialisation du Backend
 
-```bash
-npm run dev
-```
+[Référez vous au README de ce repository](https://github.com/NzlThomas/tracker-frontend)
