@@ -33,13 +33,15 @@ Bokubooks est une application full-stack permettant aux utilisateurs de gérer l
 - Node.js
 - Express.js
 - Prisma ORM
-- Base de donnée PostgreSQL
+- Base de données PostgreSQL
 
 ### Authentification
 
 - JWT
 
 ## Installation
+
+*Il est nécessaire de créer votre base de données en amont en veillant à la laisser vide, Prisma s'occupera alors de créer les tables.*
 
 ### Cloner le projet
 
@@ -60,6 +62,10 @@ npm i
 Créer un fichier `.env` à la racine du projet comme noté dans `.env.example`.
 
 ### Initialiser Prisma ORM
+
+```bash
+npx prisma generate
+```
 
 ```bash
 npx prisma migrate dev
