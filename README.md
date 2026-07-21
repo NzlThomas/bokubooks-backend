@@ -4,7 +4,7 @@ Bokubooks est une application full-stack permettant aux utilisateurs de gérer l
 
 **L'application est séparée en deux repositories différents, vous consultez actuellement la partie Backend de l'application.**
 
-[Cliquez pour accéder au repository du Frontend](https://github.com/NzlThomas/tracker-frontend)
+[Cliquez pour accéder au repository du Frontend](https://github.com/NzlThomas/bokubooks-frontend)
 
 ## Fonctionnalités
 
@@ -79,4 +79,4 @@ node app.js
 
 ## Initialisation du Frontend
 
-[Référez vous au README de ce repository](https://github.com/NzlThomas/tracker-frontend)
+[Référez vous au README de ce repository](https://github.com/NzlThomas/bokubooks-frontend)
