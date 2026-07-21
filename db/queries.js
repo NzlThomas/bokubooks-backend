@@ -114,6 +114,7 @@ async function addWishlist(userId, title) {
     select: {
       id: true,
       title: true,
+      addedAt: true,
     },
   });
 }
