@@ -71,6 +71,6 @@ npx prisma migrate dev
 node app.js
 ```
 
-## Initialisation du Backend
+## Initialisation du Frontend
 
 [Référez vous au README de ce repository](https://github.com/NzlThomas/tracker-frontend)
