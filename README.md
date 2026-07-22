@@ -4,7 +4,7 @@ Bokubooks est une application full-stack permettant aux utilisateurs de gérer l
 
 **L'application est séparée en deux repositories différents, vous consultez actuellement la partie Backend de l'application.**
 
-[Cliquez pour accéder au repository du Frontend](https://github.com/NzlThomas/tracker-frontend)
+[Cliquez pour accéder au repository du Frontend](https://github.com/NzlThomas/bokubooks-frontend)
 
 ## Fonctionnalités
 
@@ -33,7 +33,7 @@ Bokubooks est une application full-stack permettant aux utilisateurs de gérer l
 - Node.js
 - Express.js
 - Prisma ORM
-- Base de donnée PostgreSQL
+- Base de données PostgreSQL
 
 ### Authentification
 
@@ -41,17 +41,17 @@ Bokubooks est une application full-stack permettant aux utilisateurs de gérer l
 
 ## Installation
 
-### Cloner les repositories
+*Il est nécessaire de créer votre base de données en amont en veillant à la laisser vide, Prisma s'occupera alors de créer les tables.*
+
+### Cloner le projet
 
 ```bash
-git clone git@github.com:NzlThomas/tracker-frontend.git
-
 git clone git@github.com:NzlThomas/tracker-backend.git
 ```
 
 ### Installer les dépendances
 
-A la racine de chaque projet :
+A la racine du projet :
 
 ```bash
 npm i
@@ -59,9 +59,13 @@ npm i
 
 ### Configurer les variables d'environnement
 
-Créer un fichier `.env` à la racine du dossier **Backend** comme noté dans `.env.example`.
+Créer un fichier `.env` à la racine du projet comme noté dans `.env.example`.
 
 ### Initialiser Prisma ORM
+
+```bash
+npx prisma generate
+```
 
 ```bash
 npx prisma migrate dev
@@ -73,8 +77,6 @@ npx prisma migrate dev
 node app.js
 ```
 
-### Lancer le frontend
+## Initialisation du Frontend
 
-```bash
-npm run dev
-```
+[Référez vous au README de ce repository](https://github.com/NzlThomas/bokubooks-frontend)
