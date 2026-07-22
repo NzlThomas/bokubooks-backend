@@ -50,6 +50,13 @@ async function postRegister(req, res) {
   }
 }
 
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  maxAge: 24 * 60 * 60 * 1000,
+};
+
 async function postLogin(req, res) {
   try {
     const { username, password } = req.body;
@@ -74,8 +81,9 @@ async function postLogin(req, res) {
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: "24h",
     });
+
     res
-      .cookie("token", token, { httpOnly: true })
+      .cookie("token", token, cookieOptions)
       .status(200)
       .json({ user: { id: user.id, username: user.username } });
   } catch (error) {
@@ -86,9 +94,7 @@ async function postLogin(req, res) {
 async function postLogout(req, res) {
   try {
     res
-      .clearCookie("token", {
-        httpOnly: true,
-      })
+      .clearCookie("token", cookieOptions)
       .status(200)
       .json({ message: "Logged out successfully" });
   } catch (error) {
