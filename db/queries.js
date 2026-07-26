@@ -140,18 +140,25 @@ async function isAlreadyAdded(title, userId) {
   });
 }
 
-async function updateWishlist(totalRead, totalVolumes, bookId, notes) {
+async function updateWishlist(
+  totalRead,
+  totalVolumes,
+  bookId,
+  notes,
+  readingStatus,
+) {
   return prisma.book.update({
     where: {
       id: bookId,
     },
-    data: { totalRead, totalVolumes, notes },
+    data: { totalRead, totalVolumes, notes, readingStatus },
     select: {
       id: true,
       title: true,
       totalRead: true,
       totalVolumes: true,
       notes: true,
+      readingStatus: true,
     },
   });
 }
@@ -169,12 +176,20 @@ async function findUserCollection(userId) {
       title: true,
       totalVolumes: true,
       totalRead: true,
+      readingStatus: true,
       notes: true,
     },
   });
 }
 
-async function addCollection(userId, title, totalVolumes, totalRead, notes) {
+async function addCollection(
+  userId,
+  title,
+  totalVolumes,
+  totalRead,
+  notes,
+  readingStatus,
+) {
   return prisma.book.create({
     data: {
       title,
@@ -182,6 +197,7 @@ async function addCollection(userId, title, totalVolumes, totalRead, notes) {
       totalVolumes,
       userId,
       notes,
+      readingStatus,
     },
     select: {
       id: true,
@@ -189,6 +205,7 @@ async function addCollection(userId, title, totalVolumes, totalRead, notes) {
       totalRead: true,
       totalVolumes: true,
       notes: true,
+      readingStatus: true,
     },
   });
 }
@@ -218,7 +235,14 @@ async function removeCollection(id) {
   });
 }
 
-async function updateBook(id, title, totalRead, totalVolumes, notes) {
+async function updateBook(
+  id,
+  title,
+  totalRead,
+  totalVolumes,
+  notes,
+  readingStatus,
+) {
   return prisma.book.update({
     where: {
       id,
@@ -228,6 +252,7 @@ async function updateBook(id, title, totalRead, totalVolumes, notes) {
       totalRead,
       totalVolumes,
       notes,
+      readingStatus,
     },
     select: {
       id: true,
@@ -235,6 +260,7 @@ async function updateBook(id, title, totalRead, totalVolumes, notes) {
       totalRead: true,
       totalVolumes: true,
       notes: true,
+      readingStatus: true,
     },
   });
 }

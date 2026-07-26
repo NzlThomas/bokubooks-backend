@@ -25,10 +25,17 @@ model Book {
   title String
   totalVolumes Int?
   totalRead Int @default(0)
+  readingStatus ReadingStatus @default(TO_READ)
   notes String?
   user User @relation(fields: [userId], references: [id])
   userId Int
   addedAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@unique([userId, title])
+}
+
+enum ReadingStatus {
+  TO_READ
+  READING
+  READ
 }
