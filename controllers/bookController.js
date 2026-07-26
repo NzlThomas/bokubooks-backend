@@ -91,11 +91,17 @@ async function getCollection(req, res) {
 async function postCollection(req, res) {
   try {
     const userId = req.userId;
-    const { title, totalRead, totalVolumes, notes } = req.body;
+    const { title, totalRead, totalVolumes, notes, readingStatus } = req.body;
 
-    if (!title || totalRead === undefined || totalVolumes === undefined) {
+    if (
+      !title ||
+      totalRead === undefined ||
+      totalVolumes === undefined ||
+      !readingStatus
+    ) {
       return res.status(400).json({
-        error: "Missing Book title, volumes read or volumes owned.",
+        error:
+          "Missing Book title, volumes read/volumes owned or reading status.",
       });
     }
 
@@ -134,6 +140,7 @@ async function postCollection(req, res) {
         totalVolumes,
         isInWishlist.id,
         notes,
+        readingStatus,
       );
       return res.status(201).json({
         message: "Booked moved from wishlist to collection",
@@ -147,6 +154,7 @@ async function postCollection(req, res) {
       totalVolumes,
       totalRead,
       notes,
+      readingStatus,
     );
 
     res.status(201).json({ message: "Book added successfully.", newBook });
@@ -188,11 +196,18 @@ async function deleteCollection(req, res) {
 async function putCollection(req, res) {
   try {
     const userId = req.userId;
-    const { id, title, totalRead, totalVolumes, notes } = req.body;
+    const { id, title, totalRead, totalVolumes, notes, readingStatus } =
+      req.body;
 
-    if (!title || totalRead === undefined || totalVolumes === undefined) {
+    if (
+      !title ||
+      totalRead === undefined ||
+      totalVolumes === undefined ||
+      !readingStatus
+    ) {
       return res.status(400).json({
-        error: "Missing Book id, title, volumes read or volumes owned.",
+        error:
+          "Missing Book title, volumes read/volumes owned or reading status.",
       });
     }
 
@@ -231,6 +246,7 @@ async function putCollection(req, res) {
       totalRead,
       totalVolumes,
       notes,
+      readingStatus,
     );
 
     res.status(200).json({ message: "Book updated successfully", updatedBook });
@@ -242,26 +258,33 @@ async function putCollection(req, res) {
 async function getUserStats(req, res) {
   try {
     const userId = req.userId;
+
     const collection = await db.findUserCollection(userId);
+
     const totalSeries = collection.length;
 
-    let totalOwned = [];
-    for (let i = 0; i < collection.length; i++) {
-      totalOwned.push(collection[i].totalVolumes);
-    }
-    const ownedSum = totalOwned.reduce((partialSum, a) => partialSum + a, 0);
+    const ownedSum = collection.reduce(
+      (sum, book) => sum + (book.totalVolumes || 0),
+      0,
+    );
 
-    let totalRead = [];
-    for (let i = 0; i < collection.length; i++) {
-      totalRead.push(collection[i].totalRead);
-    }
-    const readSum = totalRead.reduce((partialSum, a) => partialSum + a, 0);
+    const readSum = collection.reduce((sum, book) => sum + book.totalRead, 0);
 
-    const stats = { totalSeries, ownedSum, readSum };
+    const stats = {
+      totalSeries,
+      ownedSum,
+      readSum,
+    };
 
-    res.status(200).json({ message: "Stats acquired successfully", stats });
+    res.status(200).json({
+      message: "Stats acquired successfully",
+      stats,
+    });
   } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve user statistics." });
+    console.error(error);
+    res.status(500).json({
+      error: "Failed to retrieve user statistics.",
+    });
   }
 }
 
