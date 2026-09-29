@@ -17,6 +17,8 @@ Bokubooks est une application full-stack permettant aux utilisateurs de gérer l
 - Statistiques de sa collection
 - Changement du nom d'utilisateur et du mot de passe
 
+![Aperçu de l'application](./assets/preview.png)
+
 ## Stack utilisée
 
 ### Frontend
@@ -41,7 +43,7 @@ Bokubooks est une application full-stack permettant aux utilisateurs de gérer l
 
 ## Installation
 
-*Il est nécessaire de créer votre base de données en amont en veillant à la laisser vide, Prisma s'occupera alors de créer les tables.*
+_Il est nécessaire de créer votre base de données en amont en veillant à la laisser vide, Prisma s'occupera alors de créer les tables._
 
 ### Cloner le projet
 
